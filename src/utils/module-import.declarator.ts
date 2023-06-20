@@ -1,6 +1,6 @@
 import { normalize, Path } from '@angular-devkit/core';
-import { DeclarationOptions } from './module.declarator';
-import { PathSolver } from './path.solver';
+import { DeclarationOptions } from './module.declarator.js';
+import { PathSolver } from './path.solver.js';
 
 export class ModuleImportDeclarator {
   constructor(private solver: PathSolver = new PathSolver()) {}
@@ -15,7 +15,7 @@ export class ModuleImportDeclarator {
 
   private findImportsEndpoint(contentLines: string[]): number {
     const reversedContent = Array.from(contentLines).reverse();
-    const reverseImports = reversedContent.filter(line =>
+    const reverseImports = reversedContent.filter((line) =>
       line.match(/\} from ('|")/),
     );
     if (reverseImports.length <= 0) {
@@ -34,10 +34,10 @@ export class ModuleImportDeclarator {
     let importModulePath: Path;
     if (options.type !== undefined) {
       importModulePath = normalize(
-        `/${options.path}/${options.name}.${options.type}`,
+        `/${options.path}/${options.name}.${options.type}.js`,
       );
     } else {
-      importModulePath = normalize(`/${options.path}/${options.name}`);
+      importModulePath = normalize(`/${options.path}/${options.name}.js`);
     }
     return this.solver.relative(options.module, importModulePath);
   }

@@ -1,4 +1,4 @@
-import { join, Path, strings } from '@angular-devkit/core';
+import { Path, strings } from '@angular-devkit/core';
 import {
   apply,
   mergeWith,
@@ -8,8 +8,7 @@ import {
   template,
   url,
 } from '@angular-devkit/schematics';
-import { DEFAULT_LANGUAGE } from '../defaults';
-import { ConfigurationOptions } from './configuration.schema';
+import { ConfigurationOptions } from './configuration.schema.js';
 
 export function main(options: ConfigurationOptions): Rule {
   return mergeWith(generate(transform(options)));
@@ -17,15 +16,13 @@ export function main(options: ConfigurationOptions): Rule {
 
 function transform(options: ConfigurationOptions): ConfigurationOptions {
   const target: ConfigurationOptions = Object.assign({}, options);
-  target.language =
-    target.language !== undefined ? target.language : DEFAULT_LANGUAGE;
   target.collection =
     target.collection !== undefined ? target.collection : '@nestjs/schematics';
   return target;
 }
 
 function generate(options: ConfigurationOptions): Source {
-  return apply(url(join('./files' as Path, options.language)), [
+  return apply(url('./files/ts' as Path), [
     template({
       ...strings,
       ...options,

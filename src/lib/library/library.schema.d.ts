@@ -6,14 +6,6 @@ export interface LibraryOptions {
    */
   name: string;
   /**
-   * Prefix (scope)
-   */
-  prefix?: string;
-  /**
-   * Application language.
-   */
-  language?: string;
-  /**
    * The path to create the library.
    */
   path?: string | Path;

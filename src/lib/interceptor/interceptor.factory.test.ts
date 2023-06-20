@@ -3,7 +3,7 @@ import {
   UnitTestTree,
 } from '@angular-devkit/schematics/testing';
 import * as path from 'path';
-import { InterceptorOptions } from './interceptor.schema';
+import { InterceptorOptions } from './interceptor.schema.js';
 
 describe('Interceptor Factory', () => {
   const runner: SchematicTestRunner = new SchematicTestRunner(
@@ -156,29 +156,6 @@ describe('Interceptor Factory', () => {
     );
   });
 
-  it('should manage javascript file', async () => {
-    const options: InterceptorOptions = {
-      name: 'foo',
-      language: 'js',
-    };
-    const tree: UnitTestTree = await runner
-      .runSchematicAsync('interceptor', options)
-      .toPromise();
-    const files: string[] = tree.files;
-    expect(
-      files.find((filename) => filename === '/foo.interceptor.js'),
-    ).toBeDefined();
-    expect(tree.readContent('/foo.interceptor.js')).toEqual(
-      "import { Injectable } from '@nestjs/common';\n" +
-        '\n' +
-        '@Injectable()\n' +
-        'export class FooInterceptor {\n' +
-        '  intercept(context, next) {\n' +
-        '    return next.handle();\n' +
-        '  }\n' +
-        '}\n',
-    );
-  });
   it('should create a spec file', async () => {
     const options: InterceptorOptions = {
       name: 'foo',

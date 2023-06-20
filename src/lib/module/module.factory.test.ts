@@ -4,8 +4,8 @@ import {
   UnitTestTree,
 } from '@angular-devkit/schematics/testing';
 import * as path from 'path';
-import { ApplicationOptions } from '../application/application.schema';
-import { ModuleOptions } from './module.schema';
+import { ApplicationOptions } from '../application/application.schema.js';
+import { ModuleOptions } from './module.schema.js';
 
 describe('Module Factory', () => {
   const runner: SchematicTestRunner = new SchematicTestRunner(
@@ -167,26 +167,6 @@ describe('Module Factory', () => {
         'export class FooModule {}\n',
     );
   });
-  it('should manage javascript file', async () => {
-    const options: ModuleOptions = {
-      name: 'foo',
-      skipImport: true,
-      language: 'js',
-    };
-    const tree: UnitTestTree = await runner
-      .runSchematicAsync('module', options)
-      .toPromise();
-    const files: string[] = tree.files;
-    expect(
-      files.find((filename) => filename === '/foo/foo.module.js'),
-    ).not.toBeUndefined();
-    expect(tree.readContent('/foo/foo.module.js')).toEqual(
-      "import { Module } from '@nestjs/common';\n" +
-        '\n' +
-        '@Module({})\n' +
-        'export class FooModule {}\n',
-    );
-  });
   it('should manage declaration in app module', async () => {
     const app: ApplicationOptions = {
       name: '',
@@ -200,9 +180,9 @@ describe('Module Factory', () => {
     tree = await runner.runSchematicAsync('module', options, tree).toPromise();
     expect(tree.readContent(normalize('/src/app.module.ts'))).toEqual(
       "import { Module } from '@nestjs/common';\n" +
-        "import { AppController } from './app.controller';\n" +
-        "import { AppService } from './app.service';\n" +
-        "import { FooModule } from './foo/foo.module';\n" +
+        "import { AppController } from './app.controller.js';\n" +
+        "import { AppService } from './app.service.js';\n" +
+        "import { FooModule } from './foo/foo.module.js';\n" +
         '\n' +
         '@Module({\n' +
         '  imports: [FooModule],\n' +
@@ -229,7 +209,7 @@ describe('Module Factory', () => {
     tree = await runner.runSchematicAsync('module', options, tree).toPromise();
     expect(tree.readContent(normalize('/src/bar/bar.module.ts'))).toEqual(
       "import { Module } from '@nestjs/common';\n" +
-        "import { FooModule } from './foo/foo.module';\n" +
+        "import { FooModule } from './foo/foo.module.js';\n" +
         '\n' +
         '@Module({\n' +
         '  imports: [FooModule]\n' +

@@ -1,6 +1,6 @@
 import { normalize } from '@angular-devkit/core';
-import { ModuleImportDeclarator } from '../../src/utils/module-import.declarator';
-import { DeclarationOptions } from '../../src/utils/module.declarator';
+import { ModuleImportDeclarator } from '../../src/utils/module-import.declarator.js';
+import { DeclarationOptions } from '../../src/utils/module.declarator.js';
 
 describe('Module Import Declarator', () => {
   it('should add import to the buffered module content', () => {
@@ -20,7 +20,7 @@ describe('Module Import Declarator', () => {
     const declarator = new ModuleImportDeclarator();
     expect(declarator.declare(content, options)).toEqual(
       "import { Module } from '@nestjs/common';\n" +
-        "import { BarModule } from './bar/bar.module';\n" +
+        "import { BarModule } from './bar/bar.module.js';\n" +
         '\n' +
         '@Module({})\n' +
         'export class FooModule {}\n',
@@ -43,7 +43,7 @@ describe('Module Import Declarator', () => {
     const declarator = new ModuleImportDeclarator();
     expect(declarator.declare(content, options)).toEqual(
       "import { Module } from '@nestjs/common';\n" +
-        "import { Foo } from './foo';\n" +
+        "import { Foo } from './foo.js';\n" +
         '\n' +
         '@Module({})\n' +
         'export class FooModule {}\n',
@@ -75,7 +75,7 @@ describe('Module Import Declarator', () => {
         '  Module,\n' +
         '  Helper,\n' +
         "} from '@nestjs/common';\n" +
-        "import { BarModule } from './bar/bar.module';\n" +
+        "import { BarModule } from './bar/bar.module.js';\n" +
         '\n' +
         '@Helper()\n' +
         '@Module({})\n' +
@@ -110,7 +110,7 @@ describe('Module Import Declarator', () => {
         '  Module,\n' +
         '  Helper,\n' +
         "} from '@nestjs/common';\n" +
-        "import { BarModule } from './bar/bar.module';\n" +
+        "import { BarModule } from './bar/bar.module.js';\n" +
         '\n' +
         '@Helper()\n' +
         '@Module({})\n' +

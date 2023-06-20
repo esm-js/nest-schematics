@@ -18,16 +18,20 @@ import {
 } from '@angular-devkit/schematics';
 import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
 import * as pluralize from 'pluralize';
-import { DeclarationOptions, ModuleDeclarator, ModuleFinder } from '../..';
+import {
+  DeclarationOptions,
+  ModuleDeclarator,
+  ModuleFinder,
+} from '../../index.js';
 import {
   addPackageJsonDependency,
   getPackageJsonDependency,
   NodeDependencyType,
-} from '../../utils/dependencies.utils';
-import { normalizeToKebabOrSnakeCase } from '../../utils/formatting';
-import { Location, NameParser } from '../../utils/name.parser';
-import { mergeSourceRoot } from '../../utils/source-root.helpers';
-import { ResourceOptions } from './resource.schema';
+} from '../../utils/dependencies.utils.js';
+import { normalizeToKebabOrSnakeCase } from '../../utils/formatting.js';
+import { Location, NameParser } from '../../utils/name.parser.js';
+import { mergeSourceRoot } from '../../utils/source-root.helpers.js';
+import { ResourceOptions } from './resource.schema.js';
 
 export function main(options: ResourceOptions): Rule {
   options = transform(options);
@@ -54,12 +58,6 @@ function transform(options: ResourceOptions): ResourceOptions {
   const location: Location = new NameParser().parse(target);
   target.name = normalizeToKebabOrSnakeCase(location.name);
   target.path = normalizeToKebabOrSnakeCase(location.path);
-  target.language = target.language !== undefined ? target.language : 'ts';
-  if (target.language === 'js') {
-    throw new Error(
-      'The "resource" schematic does not support JavaScript language (only TypeScript is supported).',
-    );
-  }
   target.specFileSuffix = normalizeToKebabOrSnakeCase(
     options.specFileSuffix || 'spec',
   );
@@ -74,7 +72,7 @@ function transform(options: ResourceOptions): ResourceOptions {
 
 function generate(options: ResourceOptions): Source {
   return (context: SchematicContext) =>
-    apply(url(join('./files' as Path, options.language)), [
+    apply(url('./files/ts' as Path), [
       filter((path) => {
         if (path.endsWith('.dto.ts')) {
           return (
@@ -108,7 +106,10 @@ function generate(options: ResourceOptions): Source {
         ) {
           return options.type === 'microservice' || options.type === 'rest';
         }
-        if (path.endsWith('.gateway.ts') || path.endsWith('.gateway.__specFileSuffix__.ts')) {
+        if (
+          path.endsWith('.gateway.ts') ||
+          path.endsWith('.gateway.__specFileSuffix__.ts')
+        ) {
           return options.type === 'ws';
         }
         if (path.includes('@ent')) {
@@ -119,12 +120,12 @@ function generate(options: ResourceOptions): Source {
         }
         return true;
       }),
-      options.spec 
-        ? noop() 
+      options.spec
+        ? noop()
         : filter((path) => {
             const suffix = `.__specFileSuffix__.ts`;
-            return !path.endsWith(suffix)
-        }),
+            return !path.endsWith(suffix);
+          }),
       template({
         ...strings,
         ...options,

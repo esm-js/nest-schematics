@@ -1,5 +1,5 @@
-import { MetadataManager } from './metadata.manager';
-import { DeclarationOptions } from './module.declarator';
+import { MetadataManager } from './metadata.manager.js';
+import { DeclarationOptions } from './module.declarator.js';
 
 export class ModuleMetadataDeclarator {
   public declare(content: string, options: DeclarationOptions): string {

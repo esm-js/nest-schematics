@@ -13,10 +13,10 @@ import {
   template,
   url,
 } from '@angular-devkit/schematics';
-import { normalizeToKebabOrSnakeCase } from '../../utils/formatting';
-import { Location, NameParser } from '../../utils/name.parser';
-import { mergeSourceRoot } from '../../utils/source-root.helpers';
-import { InterceptorOptions } from './interceptor.schema';
+import { normalizeToKebabOrSnakeCase } from '../../utils/formatting.js';
+import { Location, NameParser } from '../../utils/name.parser.js';
+import { mergeSourceRoot } from '../../utils/source-root.helpers.js';
+import { InterceptorOptions } from './interceptor.schema.js';
 
 export function main(options: InterceptorOptions): Rule {
   options = transform(options);
@@ -31,7 +31,6 @@ function transform(options: InterceptorOptions): InterceptorOptions {
   const location: Location = new NameParser().parse(target);
   target.name = normalizeToKebabOrSnakeCase(location.name);
   target.path = normalizeToKebabOrSnakeCase(location.path);
-  target.language = target.language !== undefined ? target.language : 'ts';
   target.specFileSuffix = normalizeToKebabOrSnakeCase(
     options.specFileSuffix || 'spec',
   );
@@ -44,15 +43,14 @@ function transform(options: InterceptorOptions): InterceptorOptions {
 
 function generate(options: InterceptorOptions): Source {
   return (context: SchematicContext) =>
-    apply(url(join('./files' as Path, options.language)), [
+    apply(url('./files/ts' as Path), [
       options.spec ? noop() : filter((path) => !path.endsWith('.spec.ts')),
-      options.spec 
-        ? noop() 
+      options.spec
+        ? noop()
         : filter((path) => {
-            const languageExtension = options.language || 'ts';
-            const suffix = `.__specFileSuffix__.${languageExtension}`;
-            return !path.endsWith(suffix)
-        }),
+            const suffix = `.__specFileSuffix__.ts`;
+            return !path.endsWith(suffix);
+          }),
       template({
         ...strings,
         ...options,

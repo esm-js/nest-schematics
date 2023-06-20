@@ -3,7 +3,7 @@ import {
   UnitTestTree,
 } from '@angular-devkit/schematics/testing';
 import * as path from 'path';
-import { ResolverOptions } from './resolver.schema';
+import { ResolverOptions } from './resolver.schema.js';
 
 describe('Resolver Factory', () => {
   const runner: SchematicTestRunner = new SchematicTestRunner(
@@ -119,26 +119,6 @@ describe('Resolver Factory', () => {
       files.find((filename) => filename === '/_bar/_foo/_foo.resolver.ts'),
     ).not.toBeUndefined();
     expect(tree.readContent('/_bar/_foo/_foo.resolver.ts')).toEqual(
-      "import { Resolver } from '@nestjs/graphql';\n" +
-        '\n' +
-        '@Resolver()\n' +
-        'export class FooResolver {}\n',
-    );
-  });
-  it('should manage javascript file', async () => {
-    const options: ResolverOptions = {
-      name: 'foo',
-      language: 'js',
-      flat: false,
-    };
-    const tree: UnitTestTree = await runner
-      .runSchematicAsync('resolver', options)
-      .toPromise();
-    const files: string[] = tree.files;
-    expect(
-      files.find((filename) => filename === '/foo/foo.resolver.js'),
-    ).not.toBeUndefined();
-    expect(tree.readContent('/foo/foo.resolver.js')).toEqual(
       "import { Resolver } from '@nestjs/graphql';\n" +
         '\n' +
         '@Resolver()\n' +

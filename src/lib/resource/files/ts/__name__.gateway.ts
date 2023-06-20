@@ -1,7 +1,7 @@
 import { WebSocketGateway<% if (crud) { %>, SubscribeMessage, MessageBody<% } %> } from '@nestjs/websockets';
-import { <%= classify(name) %>Service } from './<%= name %>.service';<% if (crud) { %>
-import { Create<%= singular(classify(name)) %>Dto } from './dto/create-<%= singular(name) %>.dto';
-import { Update<%= singular(classify(name)) %>Dto } from './dto/update-<%= singular(name) %>.dto';<% } %>
+import { <%= classify(name) %>Service } from './<%= name %>.service.js';<% if (crud) { %>
+import { Create<%= singular(classify(name)) %>Dto } from './dto/create-<%= singular(name) %>.dto.js';
+import { Update<%= singular(classify(name)) %>Dto } from './dto/update-<%= singular(name) %>.dto.js';<% } %>
 
 @WebSocketGateway()
 export class <%= classify(name) %>Gateway {

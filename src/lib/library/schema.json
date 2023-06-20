@@ -13,15 +13,6 @@
       },
       "x-prompt": "What name would you like to use for the library?"
     },
-    "prefix": {
-      "type": "string",
-      "description": "The prefix of the library.",
-      "x-prompt": "What prefix would you like to use for the library (default: @app)?"
-    },
-    "language": {
-      "type": "string",
-      "description": "Nest library language."
-    },
     "path": {
       "type": "string",
       "format": "path",
@@ -33,5 +24,5 @@
       "description": "The libraries root directory."
     }
   },
-  "required": ["name", "prefix"]
+  "required": ["name"]
 }

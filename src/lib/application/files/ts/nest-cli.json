@@ -1,6 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/nest-cli",
-  "collection": "@nestjs/schematics",
+  "collection": "@esm-js/nest-schematics",
   "sourceRoot": "src",
   "compilerOptions": {
     "deleteOutDir": true

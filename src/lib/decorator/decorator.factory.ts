@@ -11,10 +11,10 @@ import {
   template,
   url,
 } from '@angular-devkit/schematics';
-import { normalizeToKebabOrSnakeCase } from '../../utils/formatting';
-import { Location, NameParser } from '../../utils/name.parser';
-import { mergeSourceRoot } from '../../utils/source-root.helpers';
-import { DecoratorOptions } from './decorator.schema';
+import { normalizeToKebabOrSnakeCase } from '../../utils/formatting.js';
+import { Location, NameParser } from '../../utils/name.parser.js';
+import { mergeSourceRoot } from '../../utils/source-root.helpers.js';
+import { DecoratorOptions } from './decorator.schema.js';
 
 export function main(options: DecoratorOptions): Rule {
   options = transform(options);
@@ -29,7 +29,6 @@ function transform(options: DecoratorOptions): DecoratorOptions {
   const location: Location = new NameParser().parse(target);
   target.name = normalizeToKebabOrSnakeCase(location.name);
   target.path = normalizeToKebabOrSnakeCase(location.path);
-  target.language = target.language !== undefined ? target.language : 'ts';
 
   target.path = target.flat
     ? target.path
@@ -39,7 +38,7 @@ function transform(options: DecoratorOptions): DecoratorOptions {
 
 function generate(options: DecoratorOptions): Source {
   return (context: SchematicContext) =>
-    apply(url(join('./files' as Path, options.language)), [
+    apply(url('./files/ts' as Path), [
       template({
         ...strings,
         ...options,

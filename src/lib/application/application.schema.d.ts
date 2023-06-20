@@ -25,10 +25,6 @@ export interface ApplicationOptions {
    */
   version?: string;
   /**
-   * Application language.
-   */
-  language?: string;
-  /**
    * The used package manager.
    */
   packageManager?: 'npm' | 'yarn' | 'pnpm' | 'undefined';

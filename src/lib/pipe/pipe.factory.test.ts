@@ -151,30 +151,6 @@ describe('Pipe Factory', () => {
     );
   });
 
-  it('should manage javascript file', async () => {
-    const options: PipeOptions = {
-      name: 'foo',
-      language: 'js',
-      flat: false,
-    };
-    const tree: UnitTestTree = await runner
-      .runSchematicAsync('pipe', options)
-      .toPromise();
-    const files: string[] = tree.files;
-    expect(
-      files.find((filename) => filename === '/foo/foo.pipe.js'),
-    ).not.toBeUndefined();
-    expect(tree.readContent('/foo/foo.pipe.js')).toEqual(
-      "import { Injectable } from '@nestjs/common';\n" +
-        '\n' +
-        '@Injectable()\n' +
-        'export class FooPipe {\n' +
-        '  transform(value, metadata) {\n' +
-        '    return value;\n' +
-        '  }\n' +
-        '}\n',
-    );
-  });
   it('should create a spec file', async () => {
     const options: PipeOptions = {
       name: 'foo',

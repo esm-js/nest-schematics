@@ -153,29 +153,6 @@ describe('Controller Factory', () => {
         'export class FooController {}\n',
     );
   });
-  it('should manage javascript file', async () => {
-    const options: ControllerOptions = {
-      name: 'foo',
-      language: 'js',
-      skipImport: true,
-    };
-    const tree: UnitTestTree = await runner
-      .runSchematicAsync('controller', options)
-      .toPromise();
-    const files: string[] = tree.files;
-    expect(
-      files.find((filename) => filename === '/foo/foo.controller.js'),
-    ).toBeDefined();
-    expect(
-      files.find((filename) => filename === '/foo/foo.controller.spec.js'),
-    ).toBeDefined();
-    expect(tree.readContent('/foo/foo.controller.js')).toEqual(
-      "import { Controller } from '@nestjs/common';\n" +
-        '\n' +
-        "@Controller('foo')\n" +
-        'export class FooController {}\n',
-    );
-  });
   it('should manage declaration in app module', async () => {
     const app: ApplicationOptions = {
       name: '',
@@ -191,9 +168,9 @@ describe('Controller Factory', () => {
       .toPromise();
     expect(tree.readContent(normalize('/src/app.module.ts'))).toEqual(
       "import { Module } from '@nestjs/common';\n" +
-        "import { AppController } from './app.controller';\n" +
-        "import { AppService } from './app.service';\n" +
-        "import { FooController } from './foo/foo.controller';\n" +
+        "import { AppController } from './app.controller.js';\n" +
+        "import { AppService } from './app.service.js';\n" +
+        "import { FooController } from './foo/foo.controller.js';\n" +
         '\n' +
         '@Module({\n' +
         '  imports: [],\n' +
@@ -222,7 +199,7 @@ describe('Controller Factory', () => {
       .toPromise();
     expect(tree.readContent(normalize('/src/foo/foo.module.ts'))).toEqual(
       "import { Module } from '@nestjs/common';\n" +
-        "import { FooController } from './foo.controller';\n" +
+        "import { FooController } from './foo.controller.js';\n" +
         '\n' +
         '@Module({\n' +
         '  controllers: [FooController]\n' +

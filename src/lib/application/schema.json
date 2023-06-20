@@ -5,10 +5,7 @@
   "type": "object",
   "properties": {
     "name": {
-      "oneOf": [
-        { "type": "string" },
-        { "type": "number" }
-      ],
+      "oneOf": [{ "type": "string" }, { "type": "number" }],
       "description": "The name of the application.",
       "$default": {
         "$source": "argv",
@@ -39,10 +36,6 @@
       "type": "string",
       "description": "Nest application version.",
       "default": "0.0.1"
-    },
-    "language": {
-      "type": "string",
-      "description": "Nest application language."
     },
     "packageManager": {
       "type": "string",

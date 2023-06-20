@@ -3,7 +3,7 @@ import {
   UnitTestTree,
 } from '@angular-devkit/schematics/testing';
 import * as path from 'path';
-import { MiddlewareOptions } from './middleware.schema';
+import { MiddlewareOptions } from './middleware.schema.js';
 
 describe('Middleware Factory', () => {
   const runner: SchematicTestRunner = new SchematicTestRunner(
@@ -144,30 +144,6 @@ describe('Middleware Factory', () => {
         '@Injectable()\n' +
         'export class FooMiddleware implements NestMiddleware {\n' +
         '  use(req: any, res: any, next: () => void) {\n' +
-        '    next();\n' +
-        '  }\n' +
-        '}\n',
-    );
-  });
-  it('should manage javascript file', async () => {
-    const options: MiddlewareOptions = {
-      name: 'foo',
-      language: 'js',
-      flat: false,
-    };
-    const tree: UnitTestTree = await runner
-      .runSchematicAsync('middleware', options)
-      .toPromise();
-    const files: string[] = tree.files;
-    expect(
-      files.find((filename) => filename === '/foo/foo.middleware.js'),
-    ).not.toBeUndefined();
-    expect(tree.readContent('/foo/foo.middleware.js')).toEqual(
-      "import { Injectable } from '@nestjs/common';\n" +
-        '\n' +
-        '@Injectable()\n' +
-        'export class FooMiddleware {\n' +
-        '  use(req, res, next) {\n' +
         '    next();\n' +
         '  }\n' +
         '}\n',

@@ -13,4 +13,4 @@ require('ts-node').register({
   project: tsconfigPath,
 });
 
-require('./tools/gulp/gulpfile');
+require('./tools/gulp/gulpfile.cts');

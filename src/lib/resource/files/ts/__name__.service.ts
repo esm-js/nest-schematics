@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';<% if (crud && type !== 'graphql-code-first' && type !== 'graphql-schema-first') { %>
-import { Create<%= singular(classify(name)) %>Dto } from './dto/create-<%= singular(name) %>.dto';
-import { Update<%= singular(classify(name)) %>Dto } from './dto/update-<%= singular(name) %>.dto';<% } else if (crud) { %>
-import { Create<%= singular(classify(name)) %>Input } from './dto/create-<%= singular(name) %>.input';
-import { Update<%= singular(classify(name)) %>Input } from './dto/update-<%= singular(name) %>.input';<% } %>
+import { Create<%= singular(classify(name)) %>Dto } from './dto/create-<%= singular(name) %>.dto.js';
+import { Update<%= singular(classify(name)) %>Dto } from './dto/update-<%= singular(name) %>.dto.js';<% } else if (crud) { %>
+import { Create<%= singular(classify(name)) %>Input } from './dto/create-<%= singular(name) %>.input.js';
+import { Update<%= singular(classify(name)) %>Input } from './dto/update-<%= singular(name) %>.input.js';<% } %>
 
 @Injectable()
 export class <%= classify(name) %>Service {<% if (crud) { %>

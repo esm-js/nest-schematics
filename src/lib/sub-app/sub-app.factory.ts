@@ -16,18 +16,17 @@ import {
 } from '@angular-devkit/schematics';
 import { existsSync, readFileSync } from 'fs';
 import { parse, stringify } from 'comment-json';
-import { normalizeToKebabOrSnakeCase } from '../../utils/formatting';
+import { normalizeToKebabOrSnakeCase } from '../../utils/formatting.js';
 import {
   DEFAULT_APPS_PATH,
   DEFAULT_APP_NAME,
   DEFAULT_DIR_ENTRY_APP,
-  DEFAULT_LANGUAGE,
   DEFAULT_LIB_PATH,
   DEFAULT_PATH_NAME,
   PROJECT_TYPE,
   TEST_ENV,
-} from '../defaults';
-import { SubAppOptions } from './sub-app.schema';
+} from '../defaults.js';
+import { SubAppOptions } from './sub-app.schema.js';
 
 type UpdateJsonFn<T> = (obj: T) => T | void;
 interface TsConfigPartialType {
@@ -91,7 +90,6 @@ function transform(options: SubAppOptions): SubAppOptions {
   if (!target.name) {
     target.name = DEFAULT_APP_NAME;
   }
-  target.language = !!target.language ? target.language : DEFAULT_LANGUAGE;
   target.name = normalizeToKebabOrSnakeCase(target.name);
   target.path =
     target.path !== undefined
@@ -347,7 +345,6 @@ function updateMainAppOptions(
   if (!optionsFile.compilerOptions) {
     optionsFile.compilerOptions = {};
   }
-  optionsFile.compilerOptions.webpack = true;
   optionsFile.compilerOptions.tsConfigPath = tsConfigPath;
 
   if (!optionsFile.projects) {
@@ -366,7 +363,7 @@ function updateMainAppOptions(
 
 function generateWorkspace(options: SubAppOptions, appName: string): Source {
   const path = join(options.path as Path, appName);
-  return apply(url(join('./workspace' as Path, options.language)), [
+  return apply(url('./workspace/ts' as Path), [
     template({
       ...strings,
       ...options,
@@ -378,7 +375,7 @@ function generateWorkspace(options: SubAppOptions, appName: string): Source {
 
 function generate(options: SubAppOptions): Source {
   const path = join(options.path as Path, options.name);
-  return apply(url(join('./files' as Path, options.language)), [
+  return apply(url('./files/ts' as Path), [
     template({
       ...strings,
       ...options,

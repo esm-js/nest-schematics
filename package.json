@@ -1,8 +1,9 @@
 {
-  "name": "@nestjs/schematics",
+  "name": "@esm-js/nest-schematics",
   "version": "10.0.1",
   "description": "Nest - modern, fast, powerful node.js web framework (@schematics)",
   "main": "dist/index.js",
+  "type": "module",
   "files": [
     "dist/**/*"
   ],
@@ -12,7 +13,7 @@
   "scripts": {
     "postbuild": "npm run copy:collection && npm run copy:lib",
     "build": "rm -rf dist && tsc --project tsconfig.lib.json",
-    "clean": "gulp clean:src",
+    "clean": "gulp --gulpfile gulpfile.cjs clean:src",
     "copy:collection": "cpx src/collection.json dist && cpx 'src/lib/**/schema.json' dist/lib",
     "copy:lib": "cpx 'src/lib/**/{files,workspace}/**/*.*' dist/lib && cpx 'src/lib/**/{files,workspace}/**/.!(gitignore)' dist/lib",
     "lint": "eslint '{src,test}/**/*.ts' --fix",
@@ -58,10 +59,12 @@
     "eslint": "8.43.0",
     "eslint-config-prettier": "8.8.0",
     "eslint-plugin-import": "2.27.5",
+    "eslint-plugin-prettier": "^4.2.1",
     "gulp": "4.0.2",
     "gulp-clean": "0.4.0",
     "husky": "8.0.3",
     "jest": "29.5.0",
+    "lint-staged": "^13.2.2",
     "nyc": "15.1.0",
     "release-it": "15.11.0",
     "ts-jest": "29.1.0",

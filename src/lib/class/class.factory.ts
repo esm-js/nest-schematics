@@ -13,11 +13,10 @@ import {
   template,
   url,
 } from '@angular-devkit/schematics';
-import { normalizeToKebabOrSnakeCase } from '../../utils/formatting';
-import { Location, NameParser } from '../../utils/name.parser';
-import { mergeSourceRoot } from '../../utils/source-root.helpers';
-import { DEFAULT_LANGUAGE } from '../defaults';
-import { ClassOptions } from './class.schema';
+import { normalizeToKebabOrSnakeCase } from '../../utils/formatting.js';
+import { Location, NameParser } from '../../utils/name.parser.js';
+import { mergeSourceRoot } from '../../utils/source-root.helpers.js';
+import { ClassOptions } from './class.schema.js';
 
 export function main(options: ClassOptions): Rule {
   options = transform(options);
@@ -41,9 +40,6 @@ function transform(options: ClassOptions): ClassOptions {
     target.className = target.name;
   }
 
-  target.language =
-    target.language !== undefined ? target.language : DEFAULT_LANGUAGE;
-
   target.path = normalizeToKebabOrSnakeCase(location.path);
   target.path = target.flat
     ? target.path
@@ -54,12 +50,11 @@ function transform(options: ClassOptions): ClassOptions {
 
 function generate(options: ClassOptions): Source {
   return (context: SchematicContext) =>
-    apply(url(join('./files' as Path, options.language)), [
+    apply(url('./files/ts' as Path), [
       options.spec
         ? noop()
         : filter((path) => {
-            const languageExtension = options.language || 'ts';
-            const suffix = `.__specFileSuffix__.${languageExtension}`;
+            const suffix = `.__specFileSuffix__.ts`;
             return !path.endsWith(suffix);
           }),
       template({

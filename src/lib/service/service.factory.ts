@@ -15,15 +15,15 @@ import {
   url,
 } from '@angular-devkit/schematics';
 import { isNullOrUndefined } from 'util';
-import { normalizeToKebabOrSnakeCase } from '../../utils/formatting';
+import { normalizeToKebabOrSnakeCase } from '../../utils/formatting.js';
 import {
   DeclarationOptions,
   ModuleDeclarator,
-} from '../../utils/module.declarator';
-import { ModuleFinder } from '../../utils/module.finder';
-import { Location, NameParser } from '../../utils/name.parser';
-import { mergeSourceRoot } from '../../utils/source-root.helpers';
-import { ServiceOptions } from './service.schema';
+} from '../../utils/module.declarator.js';
+import { ModuleFinder } from '../../utils/module.finder.js';
+import { Location, NameParser } from '../../utils/name.parser.js';
+import { mergeSourceRoot } from '../../utils/source-root.helpers.js';
+import { ServiceOptions } from './service.schema.js';
 
 export function main(options: ServiceOptions): Rule {
   options = transform(options);
@@ -49,7 +49,6 @@ function transform(source: ServiceOptions): ServiceOptions {
   const location: Location = new NameParser().parse(target);
   target.name = normalizeToKebabOrSnakeCase(location.name);
   target.path = normalizeToKebabOrSnakeCase(location.path);
-  target.language = target.language !== undefined ? target.language : 'ts';
   target.specFileSuffix = normalizeToKebabOrSnakeCase(
     source.specFileSuffix || 'spec',
   );
@@ -62,14 +61,13 @@ function transform(source: ServiceOptions): ServiceOptions {
 
 function generate(options: ServiceOptions) {
   return (context: SchematicContext) =>
-    apply(url(join('./files' as Path, options.language)), [
-      options.spec 
-        ? noop() 
+    apply(url('./files/ts' as Path), [
+      options.spec
+        ? noop()
         : filter((path) => {
-            const languageExtension = options.language || 'ts';
-            const suffix = `.__specFileSuffix__.${languageExtension}`;
-            return !path.endsWith(suffix)
-        }),
+            const suffix = `.__specFileSuffix__.ts`;
+            return !path.endsWith(suffix);
+          }),
       template({
         ...strings,
         ...options,

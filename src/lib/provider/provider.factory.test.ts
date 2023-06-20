@@ -112,25 +112,6 @@ describe('Provider Factory', () => {
         'export class Bar {}\n',
     );
   });
-  it('should manage javascript file', async () => {
-    const options: ProviderOptions = {
-      name: 'foo',
-      skipImport: true,
-      language: 'js',
-    };
-    const tree: UnitTestTree = await runner
-      .runSchematicAsync('provider', options)
-      .toPromise();
-    const files: string[] = tree.files;
-    expect(files.find((filename) => filename === '/foo.js')).toBeDefined();
-    expect(files.find((filename) => filename === '/foo.spec.js')).toBeDefined();
-    expect(tree.readContent('/foo.js')).toEqual(
-      "import { Injectable } from '@nestjs/common';\n" +
-        '\n' +
-        '@Injectable()\n' +
-        'export class Foo {}\n',
-    );
-  });
   it('should manage declaration in app module', async () => {
     const app: ApplicationOptions = {
       name: '',
@@ -146,9 +127,9 @@ describe('Provider Factory', () => {
       .toPromise();
     expect(tree.readContent(normalize('/src/app.module.ts'))).toEqual(
       "import { Module } from '@nestjs/common';\n" +
-        "import { AppController } from './app.controller';\n" +
-        "import { AppService } from './app.service';\n" +
-        "import { Foo } from './foo';\n" +
+        "import { AppController } from './app.controller.js';\n" +
+        "import { AppService } from './app.service.js';\n" +
+        "import { Foo } from './foo.js';\n" +
         '\n' +
         '@Module({\n' +
         '  imports: [],\n' +
@@ -178,7 +159,7 @@ describe('Provider Factory', () => {
       .toPromise();
     expect(tree.readContent(normalize('/src/foo/foo.module.ts'))).toEqual(
       "import { Module } from '@nestjs/common';\n" +
-        "import { Foo } from './foo';\n" +
+        "import { Foo } from './foo.js';\n" +
         '\n' +
         '@Module({\n' +
         '  providers: [Foo]\n' +
@@ -217,9 +198,7 @@ export class FooEntity {}\n`);
       .toPromise();
     const files: string[] = tree.files;
 
-    expect(
-      files.find((filename) => filename === '/foo.spec.ts'),
-    ).toBeDefined();
+    expect(files.find((filename) => filename === '/foo.spec.ts')).toBeDefined();
   });
   it('should create a spec file with custom file suffix', async () => {
     const options: ProviderOptions = {
@@ -236,8 +215,6 @@ export class FooEntity {}\n`);
     expect(
       files.find((filename) => filename === '/foo.spec.ts'),
     ).toBeUndefined();
-    expect(
-      files.find((filename) => filename === '/foo.test.ts'),
-    ).toBeDefined();
+    expect(files.find((filename) => filename === '/foo.test.ts')).toBeDefined();
   });
 });

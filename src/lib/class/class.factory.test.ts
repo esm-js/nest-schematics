@@ -3,7 +3,7 @@ import {
   UnitTestTree,
 } from '@angular-devkit/schematics/testing';
 import * as path from 'path';
-import { ClassOptions } from './class.schema';
+import { ClassOptions } from './class.schema.js';
 
 describe('Class Factory', () => {
   const runner: SchematicTestRunner = new SchematicTestRunner(
@@ -96,22 +96,6 @@ describe('Class Factory', () => {
       'export class Foo {}\n',
     );
   });
-  it('should manage javascript file', async () => {
-    const options: ClassOptions = {
-      name: 'foo',
-      language: 'js',
-      flat: false,
-      spec: false,
-    };
-    const tree: UnitTestTree = await runner
-      .runSchematicAsync('class', options)
-      .toPromise();
-    const files: string[] = tree.files;
-    expect(
-      files.find((filename) => filename === '/foo/foo.js'),
-    ).not.toBeUndefined();
-    expect(tree.readContent('/foo/foo.js')).toEqual('export class Foo {}\n');
-  });
   it('should remove . from name', async () => {
     const options: ClassOptions = {
       name: 'foo.entity',
@@ -160,8 +144,6 @@ describe('Class Factory', () => {
     expect(
       files.find((filename) => filename === '/foo.spec.ts'),
     ).toBeUndefined();
-    expect(
-      files.find((filename) => filename === '/foo.test.ts'),
-    ).toBeDefined();
+    expect(files.find((filename) => filename === '/foo.test.ts')).toBeDefined();
   });
 });

@@ -13,32 +13,21 @@ import {
   url,
 } from '@angular-devkit/schematics';
 import { parse } from 'jsonc-parser';
-import { normalizeToKebabOrSnakeCase } from '../../utils/formatting';
+import { normalizeToKebabOrSnakeCase } from '../../utils/formatting.js';
 import {
-  DEFAULT_LANGUAGE,
   DEFAULT_LIB_PATH,
   DEFAULT_PATH_NAME,
   PROJECT_TYPE,
-} from '../defaults';
-import { LibraryOptions } from './library.schema';
+} from '../defaults.js';
+import { LibraryOptions } from './library.schema.js';
 
 type UpdateJsonFn<T> = (obj: T) => T | void;
-interface TsConfigPartialType {
-  compilerOptions: {
-    baseUrl: string;
-    paths: {
-      [key: string]: string[];
-    };
-  };
-}
 
 export function main(options: LibraryOptions): Rule {
   options = transform(options);
   return chain([
     addLibraryToCliOptions(options.path, options.name),
     updatePackageJson(options),
-    updateJestEndToEnd(options),
-    updateTsConfig(options.name, options.prefix, options.path),
     branchAndMerge(mergeWith(generate(options))),
   ]);
 }
@@ -51,14 +40,12 @@ function transform(options: LibraryOptions): LibraryOptions {
   if (!target.name) {
     throw new SchematicsException('Option (name) is required.');
   }
-  target.language = !!target.language ? target.language : DEFAULT_LANGUAGE;
   target.name = normalizeToKebabOrSnakeCase(target.name);
   target.path =
     target.path !== undefined
       ? join(normalize(defaultSourceRoot), target.path)
       : normalize(defaultSourceRoot);
 
-  target.prefix = target.prefix || '@app';
   return target;
 }
 
@@ -67,17 +54,13 @@ function updatePackageJson(options: LibraryOptions) {
     if (!host.exists('package.json')) {
       return host;
     }
-    const distRoot = join(options.path as Path, options.name, 'src');
-    const packageKey = options.prefix
-      ? options.prefix + '/' + options.name
-      : options.name;
 
     return updateJsonFile(
       host,
       'package.json',
       (packageJson: Record<string, any>) => {
         updateNpmScripts(packageJson.scripts, options);
-        updateJestConfig(packageJson.jest, options, packageKey, distRoot);
+        updateJestConfig(packageJson.jest, options);
       },
     );
   };
@@ -86,8 +69,6 @@ function updatePackageJson(options: LibraryOptions) {
 function updateJestConfig(
   jestOptions: Record<string, any>,
   options: LibraryOptions,
-  packageKey: string,
-  distRoot: string,
 ) {
   if (!jestOptions) {
     return;
@@ -105,13 +86,6 @@ function updateJestConfig(
   } else if (jestOptions.roots.indexOf(jestSourceRoot) < 0) {
     jestOptions.roots.push(jestSourceRoot);
   }
-
-  if (!jestOptions.moduleNameMapper) {
-    jestOptions.moduleNameMapper = {};
-  }
-  const packageKeyRegex = '^' + packageKey + '(|/.*)$';
-  const packageRoot = join('<rootDir>' as Path, distRoot);
-  jestOptions.moduleNameMapper[packageKeyRegex] = join(packageRoot, '$1');
 }
 
 function updateNpmScripts(
@@ -138,33 +112,6 @@ function updateNpmScripts(
   }
 }
 
-function updateJestEndToEnd(options: LibraryOptions) {
-  return (host: Tree) => {
-    const pathToFile = join('test' as Path, 'jest-e2e.json');
-    if (!host.exists(pathToFile)) {
-      return host;
-    }
-    const distRoot = join(options.path as Path, options.name, 'src');
-    const packageKey = options.prefix
-      ? options.prefix + '/' + options.name
-      : options.name;
-
-    return updateJsonFile(
-      host,
-      pathToFile,
-      (jestOptions: Record<string, any>) => {
-        if (!jestOptions.moduleNameMapper) {
-          jestOptions.moduleNameMapper = {};
-        }
-        const deepPackagePath = packageKey + '/(.*)';
-        const packageRoot = '<rootDir>/../' + distRoot;
-        jestOptions.moduleNameMapper[deepPackagePath] = packageRoot + '/$1';
-        jestOptions.moduleNameMapper[packageKey] = packageRoot;
-      },
-    );
-  };
-}
-
 function updateJsonFile<T>(
   host: Tree,
   path: string,
@@ -178,48 +125,6 @@ function updateJsonFile<T>(
     host.overwrite(path, JSON.stringify(json, null, 2));
   }
   return host;
-}
-
-function updateTsConfig(
-  packageName: string,
-  packagePrefix: string,
-  root: string,
-) {
-  return (host: Tree) => {
-    if (!host.exists('tsconfig.json')) {
-      return host;
-    }
-    const distRoot = join(root as Path, packageName, 'src');
-    const packageKey = packagePrefix
-      ? packagePrefix + '/' + packageName
-      : packageName;
-
-    return updateJsonFile(
-      host,
-      'tsconfig.json',
-      (tsconfig: TsConfigPartialType) => {
-        if (!tsconfig.compilerOptions) {
-          tsconfig.compilerOptions = {} as any;
-        }
-        if (!tsconfig.compilerOptions.baseUrl) {
-          tsconfig.compilerOptions.baseUrl = './';
-        }
-        if (!tsconfig.compilerOptions.paths) {
-          tsconfig.compilerOptions.paths = {};
-        }
-        if (!tsconfig.compilerOptions.paths[packageKey]) {
-          tsconfig.compilerOptions.paths[packageKey] = [];
-        }
-        tsconfig.compilerOptions.paths[packageKey].push(distRoot);
-
-        const deepPackagePath = packageKey + '/*';
-        if (!tsconfig.compilerOptions.paths[deepPackagePath]) {
-          tsconfig.compilerOptions.paths[deepPackagePath] = [];
-        }
-        tsconfig.compilerOptions.paths[deepPackagePath].push(distRoot + '/*');
-      },
-    );
-  };
 }
 
 function addLibraryToCliOptions(
@@ -251,12 +156,6 @@ function addLibraryToCliOptions(
         if (!optionsFile.projects) {
           optionsFile.projects = {} as any;
         }
-        if (!optionsFile.compilerOptions) {
-          optionsFile.compilerOptions = {};
-        }
-        if (optionsFile.compilerOptions.webpack === undefined) {
-          optionsFile.compilerOptions.webpack = true;
-        }
         if (optionsFile.projects[projectName]) {
           throw new SchematicsException(
             `Project "${projectName}" exists in this workspace already.`,
@@ -271,7 +170,7 @@ function addLibraryToCliOptions(
 function generate(options: LibraryOptions): Source {
   const path = join(options.path as Path, options.name);
 
-  return apply(url(join('./files' as Path, options.language)), [
+  return apply(url('./files/ts' as Path), [
     template({
       ...strings,
       ...options,

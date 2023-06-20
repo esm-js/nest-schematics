@@ -3,7 +3,7 @@ import {
   UnitTestTree,
 } from '@angular-devkit/schematics/testing';
 import * as path from 'path';
-import { DecoratorOptions } from './decorator.schema';
+import { DecoratorOptions } from './decorator.schema.js';
 
 describe('Decorator Factory', () => {
   const runner: SchematicTestRunner = new SchematicTestRunner(
@@ -117,25 +117,6 @@ describe('Decorator Factory', () => {
       "import { SetMetadata } from '@nestjs/common';\n" +
         '\n' +
         "export const Foo = (...args: string[]) => SetMetadata('_foo', args);\n",
-    );
-  });
-  it('should manage javascript file', async () => {
-    const options: DecoratorOptions = {
-      name: 'foo',
-      language: 'js',
-      flat: false,
-    };
-    const tree: UnitTestTree = await runner
-      .runSchematicAsync('decorator', options)
-      .toPromise();
-    const files: string[] = tree.files;
-    expect(
-      files.find((filename) => filename === '/foo/foo.decorator.js'),
-    ).not.toBeUndefined();
-    expect(tree.readContent('/foo/foo.decorator.js')).toEqual(
-      "import { SetMetadata } from '@nestjs/common';\n" +
-        '\n' +
-        "export const Foo = (...args) => SetMetadata('foo', args);\n",
     );
   });
 });

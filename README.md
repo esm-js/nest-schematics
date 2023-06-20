@@ -16,12 +16,40 @@
 
 ## Description
 
-The Nest CLI is a command-line interface tool that helps you to initialize, develop, and maintain your Nest applications. It assists in multiple ways, including scaffolding the project, serving it in development mode, and building and bundling the application for production distribution. It embodies best-practice architectural patterns to encourage well-structured apps. Read more [here](https://docs.nestjs.com/cli/overview).
+ESM Schematics for NestJS.
 
 ## Installation
 
+### Existing project manually converted to ESM already
+
+1. Installation:
+
 ```bash
-$ npm install -g @nestjs/schematics
+$ npm install --save-dev @esm-js/nest-schematics
+```
+
+or
+
+```bash
+$ yarn add --dev @esm-js/nest-schematics
+```
+
+2. Updating `nest-cli.json`
+
+```json
+{
+  "collection": "@esm-js/nest-schematics"
+}
+```
+
+### New installation of Nest.js
+
+```bash
+$ npm install -g @nestjs/cli @esm-js/nest-schematics
+```
+
+```bash
+$ nest new -c @esm-js/nest-schematics project-name
 ```
 
 ## Usage

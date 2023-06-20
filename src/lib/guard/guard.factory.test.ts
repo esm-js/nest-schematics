@@ -3,7 +3,7 @@ import {
   UnitTestTree,
 } from '@angular-devkit/schematics/testing';
 import * as path from 'path';
-import { GuardOptions } from './guard.schema';
+import { GuardOptions } from './guard.schema.js';
 
 describe('Guard Factory', () => {
   const runner: SchematicTestRunner = new SchematicTestRunner(
@@ -168,29 +168,6 @@ describe('Guard Factory', () => {
     );
   });
 
-  it('should manage javascript file', async () => {
-    const options: GuardOptions = {
-      name: 'foo',
-      language: 'js',
-    };
-    const tree: UnitTestTree = await runner
-      .runSchematicAsync('guard', options)
-      .toPromise();
-    const files: string[] = tree.files;
-    expect(
-      files.find((filename) => filename === '/foo.guard.js'),
-    ).not.toBeUndefined();
-    expect(tree.readContent('/foo.guard.js')).toEqual(
-      "import { Injectable } from '@nestjs/common';\n" +
-        '\n' +
-        '@Injectable()\n' +
-        'export class FooGuard {\n' +
-        '  canActivate(context) {\n' +
-        '    return true;\n' +
-        '  }\n' +
-        '}\n',
-    );
-  });
   it('should create a spec file', async () => {
     const options: GuardOptions = {
       name: 'foo',
