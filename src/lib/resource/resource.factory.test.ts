@@ -179,7 +179,7 @@ import { UsersController } from './users.controller.js';
 
 @Module({
   controllers: [UsersController],
-  providers: [UsersService]
+  providers: [UsersService],
 })
 export class UsersModule {}
 `);
@@ -298,7 +298,7 @@ import { UsersController } from './users.controller.js';
 
 @Module({
   controllers: [UsersController],
-  providers: [UsersService]
+  providers: [UsersService],
 })
 export class UsersModule {}
 `);
@@ -470,7 +470,7 @@ import { UsersController } from './users.controller.js';
 
 @Module({
   controllers: [UsersController],
-  providers: [UsersService]
+  providers: [UsersService],
 })
 export class UsersModule {}
 `);
@@ -592,7 +592,7 @@ import { UsersController } from './users.controller.js';
 
 @Module({
   controllers: [UsersController],
-  providers: [UsersService]
+  providers: [UsersService],
 })
 export class UsersModule {}
 `);
@@ -762,7 +762,7 @@ import { UsersService } from './users.service.js';
 import { UsersGateway } from './users.gateway.js';
 
 @Module({
-  providers: [UsersGateway, UsersService]
+  providers: [UsersGateway, UsersService],
 })
 export class UsersModule {}
 `);
@@ -881,7 +881,7 @@ import { UsersService } from './users.service.js';
 import { UsersGateway } from './users.gateway.js';
 
 @Module({
-  providers: [UsersGateway, UsersService]
+  providers: [UsersGateway, UsersService],
 })
 export class UsersModule {}
 `);
@@ -1052,7 +1052,7 @@ import { UsersService } from './users.service.js';
 import { UsersResolver } from './users.resolver.js';
 
 @Module({
-  providers: [UsersResolver, UsersService]
+  providers: [UsersResolver, UsersService],
 })
 export class UsersModule {}
 `);
@@ -1294,7 +1294,7 @@ import { UsersService } from './users.service.js';
 import { UsersResolver } from './users.resolver.js';
 
 @Module({
-  providers: [UsersResolver, UsersService]
+  providers: [UsersResolver, UsersService],
 })
 export class UsersModule {}
 `);

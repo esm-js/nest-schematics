@@ -22,11 +22,12 @@ function transform(options: ConfigurationOptions): ConfigurationOptions {
 }
 
 function generate(options: ConfigurationOptions): Source {
+  const projectOrPath = options.project ?? '.';
   return apply(url('./files/ts' as Path), [
     template({
       ...strings,
       ...options,
     }),
-    move(options.project),
+    move(projectOrPath),
   ]);
 }

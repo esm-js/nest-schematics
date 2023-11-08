@@ -2,7 +2,7 @@ export interface ConfigurationOptions {
   /**
    * The project where generate the configuration.
    */
-  project: string;
+  project?: string;
   /**
    * The collection to use in the configuration
    */

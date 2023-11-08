@@ -45,6 +45,16 @@
       "type": "string",
       "description": "Nest application dependencies."
     },
+    "spec": {
+      "type": "boolean",
+      "default": true,
+      "description": "Specifies if a spec file is generated."
+    },
+    "specFileSuffix": {
+      "type": "string",
+      "default": "spec",
+      "description": "Specifies the file suffix of spec files."
+    },
     "devDependencies": {
       "type": "string",
       "description": "Nest application development dependencies."

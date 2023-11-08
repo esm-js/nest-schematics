@@ -1,8 +1,10 @@
 import { Path, strings } from '@angular-devkit/core';
 import {
   apply,
+  filter,
   mergeWith,
   move,
+  noop,
   Rule,
   Source,
   template,
@@ -38,6 +40,9 @@ function transform(options: ApplicationOptions): ApplicationOptions {
     : DEFAULT_DESCRIPTION;
   target.name = resolvePackageName(target.name.toString());
   target.version = !!target.version ? target.version : DEFAULT_VERSION;
+  target.specFileSuffix = normalizeToKebabOrSnakeCase(
+    options.specFileSuffix || 'spec',
+  );
 
   target.packageManager =
     !target.packageManager || target.packageManager === 'undefined'
@@ -74,6 +79,15 @@ function resolvePackageName(path: string) {
 
 function generate(options: ApplicationOptions, path: string): Source {
   return apply(url('./files/ts' as Path), [
+    options.spec
+      ? noop()
+      : filter((path) => !path.endsWith('__specFileSuffix__.ts')),
+    options.spec
+      ? noop()
+      : filter((path) => {
+          const suffix = `__specFileSuffix__.ts`;
+          return !path.endsWith(suffix);
+        }),
     template({
       ...strings,
       ...options,
