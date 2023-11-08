@@ -2,7 +2,7 @@
   "compilerOptions": {
     "module": "CommonJS",
     "moduleDetection": "force",
-    "moduleResolution": "Node16",
+    "moduleResolution": "Node",
     "target": "ES2021",
     "typeRoots": ["node_modules/@types"],
     "outDir": "dist",
